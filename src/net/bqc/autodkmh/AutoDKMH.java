@@ -76,19 +76,13 @@ public class AutoDKMH {
             System.out.println("\n/******************************************/");
             System.out.println("Try on: " + cal.getTime().toString());
 
-            /*load login site to get cookie and login parameters then login using post*/
-            System.out.print("Getting cookies...");
-            String loginSiteHtml = sendGet(LOGIN_URL);
-            System.out.println("[Done]");
-
-            System.out.print("Logging in...");
-            String loginParams = getFormParams(loginSiteHtml, user, password);
-            String res = sendPost(LOGIN_URL, loginParams);
-            if (!res.contains("<title>Trang ch\u1EE7")) {
-                System.out.println("[Fail]");
-                System.exit(1);
+            try {
+                doLogin();
+            } catch (Exception e) {
+                System.err.println("\nEncounter with exception " + e.getMessage());
+                System.out.println("Try again...");
+                continue ;
             }
-            System.out.println("[Success]");
 
             /*get list of courses and the course details by given course code*/
             System.out.print("Get raw courses data...");
@@ -132,6 +126,22 @@ public class AutoDKMH {
             System.out.println("/******************************************/");
             Thread.sleep(sleepTime);
         }
+    }
+    
+    private void doLogin() throws IOException {
+        /*load login site to get cookie and login parameters then login using post*/
+        System.out.print("Getting cookies...");
+        String loginSiteHtml = sendGet(LOGIN_URL);
+        System.out.println("[Done]");
+        
+        System.out.print("Logging in...");
+        String loginParams = getFormParams(loginSiteHtml, user, password);
+        String res = sendPost(LOGIN_URL, loginParams);
+        if (!res.contains("<title>Trang ch\u1EE7")) {
+            System.out.println("[Fail]");
+            System.exit(1);
+        }
+        System.out.println("[Success]");
     }
     
     private void loadInitialParameters(String filePath) {
