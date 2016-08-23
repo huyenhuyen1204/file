@@ -46,11 +46,14 @@ public class AutoDKMH {
     private String password;
     private ArrayList<String> courseCodes;
     
+    private List<Course> courses;
+    
     // sleep time
     private long sleepTime;
     
     public AutoDKMH() {
         courseCodes = new ArrayList<>();
+        courses = new ArrayList<>();
         loadInitialParameters("config.properties");
     }
 
@@ -63,8 +66,75 @@ public class AutoDKMH {
         System.out.println("//! Course Codes = " + tool.courseCodes);
         System.out.println("/******************************************/");
 
-        tool.run();
+        tool.run2();
         
+    }
+    
+    private void run2() throws IOException, InterruptedException {
+        CookieHandler.setDefault(new CookieManager());
+        Calendar cal = Calendar.getInstance();
+        
+
+        Course bongBan = new Course("PES1030 5", "51", "0008752");
+        Course cacVanDeCNTT = new Course("INT3507 5", "71", "0007022");
+        Course tinHieuHeThong = new Course("ELT2035 6", "376", "0005372");
+        
+        courses.add(bongBan);
+        courses.add(cacVanDeCNTT);
+        courses.add(tinHieuHeThong);
+        
+//        Course bongDa = new Course("PES1025 5", "47", "0006272");
+//        Course cauLong = new Course("PES1035 7", "176", "0006262");
+//        Course bongBan2 = new Course("PES1030 7", "53", "0008752");
+//        courses.add(bongDa);
+//        courses.add(cauLong);
+//        courses.add(bongBan2);
+        
+        while (true) {
+            System.out.println("\n/******************************************/");
+            System.out.println("Try on: " + cal.getTime().toString());
+
+            try {
+                doLogin();
+            } catch (Exception e) {
+                System.err.println("\nEncounter with exception " + e.getMessage());
+                System.out.println("Try again...");
+                continue ;
+            }
+
+            if (courseCodes.isEmpty()) {
+                System.out.println("\nRegistered all!\n[Exit]");
+                System.exit(1);
+            }
+            
+            for (int i = 0; i < courses.size(); i++) {
+                /*register courses and submit them*/
+                Course course = courses.get(i);
+                if (courses != null) {
+                    // check prerequisite courses
+//                    System.out.print("Checking prerequisite courses...");
+//                    sendPost(String.format(CHECK_PREREQUISITE_COURSES_URL, courseDetails[0]), "");
+//                    System.out.println("[Done]");
+                    // choose course
+                    System.out.print("Choose [" + course.getCourseCode() + "] for queue...");
+                    sendPost(String.format(CHOOSE_COURSE_URL, course.getRowindex()), "");
+                    System.out.println("[Done]");
+                    // submit registered courses
+                    System.out.print("Submitting...");
+                    sendPost(String.format(SUBMIT_URL, ""), "");
+                    System.out.println("[Success]");
+                    // remove after being registered
+                    courses.remove(i);
+                }
+            }
+            
+            // logout
+            System.out.print("Logging out...");
+            sendGet(LOGOUT_URL);
+            System.out.println("[Success]");
+            System.out.println("/******************************************/");
+            Thread.sleep(sleepTime);
+        }
     }
     
     private void run() throws IOException, InterruptedException {
