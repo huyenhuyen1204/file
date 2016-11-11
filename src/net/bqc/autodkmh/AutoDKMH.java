@@ -21,7 +21,7 @@ import java.util.Properties;
 /**
  * Tool for automatically registering courses of VNU
  * Created by cuong on 12/2/2015.
- * Updated on 8/10/2016
+ * Updated on 11/11/2016
  */
 public class AutoDKMH {
     
@@ -29,8 +29,9 @@ public class AutoDKMH {
 
     public final static String LOGIN_URL = HOST + "/dang-nhap";
     public final static String LOGOUT_URL = HOST + "/Account/Logout";
-    public final static String COURSES_DATA_URL = HOST + "/danh-sach-mon-hoc/1/1"; // only available course for faculty
-    public final static String COURSES_DATA_URL_2 = HOST + "/danh-sach-mon-hoc/1/2"; // all courses
+    public final static String AVAILABLE_COURSES_DATA_URL = HOST + "/danh-sach-mon-hoc/1/1"; // only available course for faculty
+    public final static String AVAILABLE_COURSES_DATA_URL_2 = HOST + "/danh-sach-mon-hoc/1/2"; // all courses
+    public final static String REGISTERED_COURSES_DATA_URL = HOST + "/danh-sach-mon-hoc-da-dang-ky/1";
     public final static String CHECK_PREREQUISITE_COURSES_URL = HOST + "/kiem-tra-tien-quyet/%s/1"; //%s for data-crdid
     public final static String CHOOSE_COURSE_URL = HOST + "/chon-mon-hoc/%s/1/1"; //%s for data-rowindex
     public final static String SUBMIT_URL = HOST + "/xac-nhan-dang-ky/1";
@@ -40,7 +41,6 @@ public class AutoDKMH {
     public final static String ACCEPT_LANGUAGE = "en-US,en;q=0.5";
 
     private HttpURLConnection con;
-    private List<String> cookies;
     
     // user's information
     private String user;
@@ -74,76 +74,37 @@ public class AutoDKMH {
         
     }
     
-    private void run2() throws IOException, InterruptedException {
-        CookieHandler.setDefault(new CookieManager());
-        Calendar cal = Calendar.getInstance();
-        
-
-        Course bongBan = new Course("PES1030 5", "51", "0008752");
-        Course cacVanDeCNTT = new Course("INT3507 5", "71", "0007022");
-        Course tinHieuHeThong = new Course("ELT2035 6", "376", "0005372");
-        
-        courses.add(bongBan);
-        courses.add(cacVanDeCNTT);
-        courses.add(tinHieuHeThong);
-        
-//        Course bongDa = new Course("PES1025 5", "47", "0006272");
-//        Course cauLong = new Course("PES1035 7", "176", "0006262");
-//        Course bongBan2 = new Course("PES1030 7", "53", "0008752");
-//        courses.add(bongDa);
-//        courses.add(cauLong);
-//        courses.add(bongBan2);
-        
-        while (true) {
-            System.out.println("\n/******************************************/");
-            System.out.println("Try on: " + cal.getTime().toString());
-
-            try {
-                doLogin();
-            } catch (Exception e) {
-                System.err.println("\nEncounter with exception " + e.getMessage());
-                System.out.println("Try again...");
-                continue ;
-            }
-
-            if (courseCodes.isEmpty()) {
-                System.out.println("\nRegistered all!\n[Exit]");
-                System.exit(1);
-            }
-            
-            for (int i = 0; i < courses.size(); i++) {
-                /*register courses and submit them*/
-                Course course = courses.get(i);
-                if (courses != null) {
-                    // check prerequisite courses
-//                    System.out.print("Checking prerequisite courses...");
-//                    sendPost(String.format(CHECK_PREREQUISITE_COURSES_URL, courseDetails[0]), "");
-//                    System.out.println("[Done]");
-                    // choose course
-                    System.out.print("Choose [" + course.getCourseCode() + "] for queue...");
-                    sendPost(String.format(CHOOSE_COURSE_URL, course.getRowindex()), "");
-                    System.out.println("[Done]");
-                    // submit registered courses
-                    System.out.print("Submitting...");
-                    sendPost(String.format(SUBMIT_URL, ""), "");
-                    System.out.println("[Success]");
-                    // remove after being registered
-                    courses.remove(i);
-                }
-            }
-            
-            // logout
-            System.out.print("Logging out...");
-            sendGet(LOGOUT_URL);
-            System.out.println("[Success]");
-            System.out.println("/******************************************/");
-            Thread.sleep(sleepTime);
-        }
+    private void printCookies(CookieManager cookieManager) {
+    	for (HttpCookie cookie : cookieManager.getCookieStore().getCookies()) {
+			
+    		// gets domain set for the cookie
+			System.out.println("Domain: " + cookie.getDomain());
+			
+			// gets max age of the cookie
+			System.out.println("max age: " + cookie.getMaxAge());
+			
+			// gets name cookie
+			System.out.println("name of cookie: " + cookie.getName());
+			
+			// gets path of the server
+			System.out.println("server path: " + cookie.getPath());
+			
+			// gets boolean if cookie is being sent with secure protocol
+			System.out.println("is cookie secure: " + cookie.getSecure());
+			
+			// gets the value of the cookie
+			System.out.println("value of cookie: " + cookie.getValue());
+			
+			// gets the version of the protocol with which the given cookie is related.
+			System.out.println("value of cookie: " + cookie.getVersion());
+    	}
+    	
     }
     
     private void run() throws IOException, InterruptedException {
-        /*turn on cookie*/
-        CookieHandler.setDefault(new CookieManager());
+        // turn on cookie
+    	CookieManager cookieManager = new CookieManager();
+        CookieHandler.setDefault(cookieManager);
         Calendar cal = Calendar.getInstance();
 
         while (true) {
@@ -160,13 +121,14 @@ public class AutoDKMH {
 
             /*get list of courses and the course details by given course code*/
             System.out.print("Get raw courses data...");
-            String coursesData = sendPost(COURSES_DATA_URL_2, ""); // get courses data
-            System.out.println("[Done]");
 
-            if (courseCodes.isEmpty()) {
-                System.out.println("\nRegistered all!\n[Exit]");
-                System.exit(1);
-            }
+            // get available courses of faculty, need do it before submitting new course
+            String coursesData = sendPost(AVAILABLE_COURSES_DATA_URL, "");
+            // must get this shit before submitting a new course >.<
+            sendPost(REGISTERED_COURSES_DATA_URL, "");
+            // get all available courses of school
+            coursesData = sendPost(AVAILABLE_COURSES_DATA_URL_2, "");
+            System.out.println("[Done]");
             
             for (int i = 0; i < courseCodes.size(); i++) {
                 System.out.print("\nGetting course information for [" + courseCodes.get(i) + "]...");
@@ -180,17 +142,17 @@ public class AutoDKMH {
                     System.out.print("Checking prerequisite courses...");
                     String res = sendPost(String.format(CHECK_PREREQUISITE_COURSES_URL, courseDetails[0]), "");
                     System.out.println("[Done]");
-                    System.out.println("response: " +res);
+                    System.out.println("response: " + res);
                     // choose course
                     System.out.print("Choose [" + courseCodes.get(i) + "] for queue...");
-                    sendPost(String.format(CHOOSE_COURSE_URL, courseDetails[1]), "");
+                    res = sendPost(String.format(CHOOSE_COURSE_URL, courseDetails[1]), "");
                     System.out.println("[Done]");
-                    System.out.println("response: " +res);
+                    System.out.println("response: " + res);
                     // submit registered courses
                     System.out.print("Submitting...");
-                    sendPost(String.format(SUBMIT_URL, ""), "");
-                    System.out.println("[Success]");
-                    System.out.println("response: " +res);
+                    res = sendPost(String.format(SUBMIT_URL, ""), "");
+                    System.out.println("[Done]");
+                    System.out.println("response: " + res);
                     // remove after being registered
                     courseCodes.remove(i);
                 }
@@ -200,6 +162,12 @@ public class AutoDKMH {
             System.out.print("Logging out...");
             sendGet(LOGOUT_URL);
             System.out.println("[Success]");
+            
+            if (courseCodes.isEmpty()) {
+                System.out.println("\nRegistered all!\n[Exit]");
+                System.exit(1);
+            }
+            
             System.out.println("/******************************************/");
             Thread.sleep(sleepTime);
         }
@@ -207,7 +175,7 @@ public class AutoDKMH {
     
     private void doLogin() throws IOException {
         /*load login site to get cookie and login parameters then login using post*/
-        System.out.print("Getting cookies...");
+        System.out.print("Getting cookies, token...");
         String loginSiteHtml = sendGet(LOGIN_URL);
         System.out.println("[Done]");
         
@@ -332,14 +300,6 @@ public class AutoDKMH {
         con.setRequestProperty("User-Agent", USER_AGENT);
         con.setRequestProperty("Accept", ACCEPT);
         con.setRequestProperty("Accept-Language", ACCEPT_LANGUAGE);
-//        con.setRequestProperty("Referer", "http://dangkyhoc.vnu.edu.vn/dang-nhap");
-
-//        if (cookies != null) {
-//        	for (String cookie : cookies) {
-//                con.addRequestProperty("Cookie", cookie.split(";", 2)[0]);
-//            }
-//        }
-
         con.setRequestProperty("Connection", "keep-alive");
         con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         con.setRequestProperty("Content-Length", Integer.toString(postParams.length()));
@@ -381,17 +341,11 @@ public class AutoDKMH {
         con.setRequestMethod("GET");
         con.setUseCaches(false);
 //        con.setConnectTimeout(1000000);
+        
         //set properties
         con.setRequestProperty("User-Agent", USER_AGENT);
         con.setRequestProperty("Accept", ACCEPT);
         con.setRequestProperty("Accept-Language", ACCEPT_LANGUAGE);
-//        con.setRequestProperty("Referer", "http://dangkyhoc.vnu.edu.vn/dang-nhap");
-
-//        if (cookies != null) {
-//            for (String cookie : this.cookies) {
-//                con.addRequestProperty("Cookie", cookie.split(";", 2)[0]);
-//            }
-//        }
 
         //check result code
 //        int responseCode = con.getResponseCode();
@@ -408,15 +362,6 @@ public class AutoDKMH {
             response.append(inputLine);
         }
         in.close();
-
-        //save cookies
-//        if (cookies == null) {
-//            setCookies(con.getHeaderFields().get("Set-Cookie"));
-//        }
         return response.toString();
-    }
-
-    public void setCookies(List<String> cookies) {
-        this.cookies = cookies;
     }
 }
