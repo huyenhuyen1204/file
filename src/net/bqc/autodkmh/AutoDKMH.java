@@ -5,6 +5,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.awt.SecondaryLoop;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -24,7 +25,7 @@ import java.util.Properties;
  */
 public class AutoDKMH {
     
-    public final static String HOST = "http://112.137.128.122";
+    public final static String HOST = "http://dangkyhoc.vnu.edu.vn";
 
     public final static String LOGIN_URL = HOST + "/dang-nhap";
     public final static String LOGOUT_URL = HOST + "/Account/Logout";
@@ -59,6 +60,9 @@ public class AutoDKMH {
 
     public static void main(String args[]) throws IOException, InterruptedException {
         AutoDKMH tool = new AutoDKMH();
+        
+//        tool.sendGet(HOST);
+        
         System.out.println("/******************************************/");
         System.out.println("//! Username = " + tool.user.substring(0, 6) + "**");
         // not support for password under 2 characters :P
@@ -66,7 +70,7 @@ public class AutoDKMH {
         System.out.println("//! Course Codes = " + tool.courseCodes);
         System.out.println("/******************************************/");
 
-        tool.run2();
+        tool.run();
         
     }
     
@@ -165,7 +169,7 @@ public class AutoDKMH {
             }
             
             for (int i = 0; i < courseCodes.size(); i++) {
-                System.out.print("Getting course information for [" + courseCodes.get(i) + "]...");
+                System.out.print("\nGetting course information for [" + courseCodes.get(i) + "]...");
                 String courseDetails[] = 
                         getCourseDetailsFromCoursesData(coursesData, courseCodes.get(i));
                 System.out.println("[Done]");
@@ -174,16 +178,19 @@ public class AutoDKMH {
                 if (courseDetails != null) {
                     // check prerequisite courses
                     System.out.print("Checking prerequisite courses...");
-                    sendPost(String.format(CHECK_PREREQUISITE_COURSES_URL, courseDetails[0]), "");
+                    String res = sendPost(String.format(CHECK_PREREQUISITE_COURSES_URL, courseDetails[0]), "");
                     System.out.println("[Done]");
+                    System.out.println("response: " +res);
                     // choose course
                     System.out.print("Choose [" + courseCodes.get(i) + "] for queue...");
                     sendPost(String.format(CHOOSE_COURSE_URL, courseDetails[1]), "");
                     System.out.println("[Done]");
+                    System.out.println("response: " +res);
                     // submit registered courses
                     System.out.print("Submitting...");
                     sendPost(String.format(SUBMIT_URL, ""), "");
                     System.out.println("[Success]");
+                    System.out.println("response: " +res);
                     // remove after being registered
                     courseCodes.remove(i);
                 }
@@ -325,11 +332,13 @@ public class AutoDKMH {
         con.setRequestProperty("User-Agent", USER_AGENT);
         con.setRequestProperty("Accept", ACCEPT);
         con.setRequestProperty("Accept-Language", ACCEPT_LANGUAGE);
-//        con.setRequestProperty("Referer", "http://dangkyhoc.daotao.vnu.edu.vn/dang-nhap");
+//        con.setRequestProperty("Referer", "http://dangkyhoc.vnu.edu.vn/dang-nhap");
 
-        for (String cookie : cookies) {
-            con.addRequestProperty("Cookie", cookie.split(";", 2)[0]);
-        }
+//        if (cookies != null) {
+//        	for (String cookie : cookies) {
+//                con.addRequestProperty("Cookie", cookie.split(";", 2)[0]);
+//            }
+//        }
 
         con.setRequestProperty("Connection", "keep-alive");
         con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -357,8 +366,6 @@ public class AutoDKMH {
             response.append(inputLine);
         }
         in.close();
-
-//        System.out.println(response.toString());
         return response.toString();
     }
 
@@ -378,13 +385,13 @@ public class AutoDKMH {
         con.setRequestProperty("User-Agent", USER_AGENT);
         con.setRequestProperty("Accept", ACCEPT);
         con.setRequestProperty("Accept-Language", ACCEPT_LANGUAGE);
-//        con.setRequestProperty("Referer", "http://dangkyhoc.daotao.vnu.edu.vn/dang-nhap");
+//        con.setRequestProperty("Referer", "http://dangkyhoc.vnu.edu.vn/dang-nhap");
 
-        if (cookies != null) {
-            for (String cookie : this.cookies) {
-                con.addRequestProperty("Cookie", cookie.split(";", 2)[0]);
-            }
-        }
+//        if (cookies != null) {
+//            for (String cookie : this.cookies) {
+//                con.addRequestProperty("Cookie", cookie.split(";", 2)[0]);
+//            }
+//        }
 
         //check result code
 //        int responseCode = con.getResponseCode();
@@ -403,11 +410,9 @@ public class AutoDKMH {
         in.close();
 
         //save cookies
-        if (cookies == null) {
-            System.out.println(con.getHeaderFields().get("Set-Cookie"));
-            setCookies(con.getHeaderFields().get("Set-Cookie"));
-        }
-
+//        if (cookies == null) {
+//            setCookies(con.getHeaderFields().get("Set-Cookie"));
+//        }
         return response.toString();
     }
 
