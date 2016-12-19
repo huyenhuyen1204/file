@@ -5,7 +5,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.awt.SecondaryLoop;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -124,6 +123,7 @@ public class AutoDKMH {
 
             // get available courses of faculty, need do it before submitting new course
             String coursesData = sendPost(AVAILABLE_COURSES_DATA_URL, "");
+            System.out.println(coursesData);
             // must get this shit before submitting a new course >.<
             sendPost(REGISTERED_COURSES_DATA_URL, "");
             // get all available courses of school
