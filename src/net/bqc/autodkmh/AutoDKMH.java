@@ -153,17 +153,17 @@ public class AutoDKMH {
                     System.out.print("Checking prerequisite courses...");
                     String res = sendPost(String.format(CHECK_PREREQUISITE_COURSES_URL, courseDetails[0]), "");
                     System.out.println("[Done]");
-                    System.out.println("response: " + res);
+                    System.out.println("Response: " + res);
                     // choose course
                     System.out.print("Choose [" + courseCodes.get(i) + "] for queue...");
                     res = sendPost(String.format(CHOOSE_COURSE_URL, courseDetails[1]), "");
                     System.out.println("[Done]");
-                    System.out.println("response: " + res);
+                    System.out.println("Response: " + res);
                     // submit registered courses
                     System.out.print("Submitting...");
                     res = sendPost(String.format(SUBMIT_URL, ""), "");
                     System.out.println("[Done]");
-                    System.out.println("response: " + res);
+                    System.out.println("Response: " + res);
                     // remove after being registered
                     if (res.contains("thành công"))
                         courseCodes.remove(i);
