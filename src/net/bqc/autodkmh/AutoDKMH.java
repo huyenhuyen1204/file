@@ -14,8 +14,10 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * Tool for automatically registering courses of VNU.
@@ -55,7 +57,7 @@ public class AutoDKMH {
     // user's information
     private String user;
     private String password;
-    private ArrayList<String> courseCodes;
+    private List<String> courseCodes;
 
     private List<Course> courses;
 
@@ -73,43 +75,14 @@ public class AutoDKMH {
 
         // tool.sendGet(HOST);
 
-        System.out.println("/******************************************/");
-        System.out.println("//! Username = " + tool.user);
+        logn("/******************************************/");
+        logn("//! Username = " + tool.user);
         // not support for password under 2 characters :P
-        System.out.println("//! Password = " + "********");
-        System.out.println("//! Course Codes = " + tool.courseCodes);
-        System.out.println("/******************************************/");
+        logn("//! Password = " + "********");
+        logn("//! Course Codes = " + tool.courseCodes);
+        logn("/******************************************/");
 
         tool.run();
-
-    }
-
-    private void printCookies(CookieManager cookieManager) {
-        for (HttpCookie cookie : cookieManager.getCookieStore().getCookies()) {
-
-            // gets domain set for the cookie
-            System.out.println("Domain: " + cookie.getDomain());
-
-            // gets max age of the cookie
-            System.out.println("max age: " + cookie.getMaxAge());
-
-            // gets name cookie
-            System.out.println("name of cookie: " + cookie.getName());
-
-            // gets path of the server
-            System.out.println("server path: " + cookie.getPath());
-
-            // gets boolean if cookie is being sent with secure protocol
-            System.out.println("is cookie secure: " + cookie.getSecure());
-
-            // gets the value of the cookie
-            System.out.println("value of cookie: " + cookie.getValue());
-
-            // gets the version of the protocol with which the given cookie is
-            // related.
-            System.out.println("value of cookie: " + cookie.getVersion());
-        }
-
     }
 
     /**
@@ -125,71 +98,82 @@ public class AutoDKMH {
         Calendar cal = Calendar.getInstance();
 
         while (true) {
-            System.out.println("\n/******************************************/");
-            System.out.println("Try on: " + cal.getTime().toString());
+            logn("\n/******************************************/");
+            logn("Try on: " + cal.getTime().toString());
 
             try {
                 doLogin();
             } catch (Exception e) {
                 System.err.println("\nEncountered exception " + e.getMessage());
-                System.out.println("Try again...");
+                logn("Try again...");
                 continue;
             }
 
-            /*
-             * get list of courses and the course details by given course code
-             */
-            System.out.print("Get raw courses data...");
-
-            // get available courses of faculty
+            // get registered courses, filter desired courses
             // it is necessary to do it before submitting courses
-            sendPost(AVAILABLE_COURSES_DATA_URL_MAJOR, "");
-            // must get this shit before submitting a new course >.<
-            sendPost(REGISTERED_COURSES_DATA_URL, "");
-            // get all available courses of school
-            String coursesData = sendPost(AVAILABLE_COURSES_DATA_URL_ALL, "");
-            System.out.println("[Done]");
+            log("Filtering desired courses...");
+            String registeredCoursesData = sendPost(REGISTERED_COURSES_DATA_URL, "");
+            logn(registeredCoursesData);
+            courseCodes = courseCodes.stream()
+                    .filter(code -> !registeredCoursesData.contains(code))
+                    .collect(Collectors.toList());
+            logn("[Done]");
+            logn("Filtered courses: " + courseCodes);
 
-            for (int i = 0; i < courseCodes.size(); i++) {
-                System.out.print("\nGetting course information for [" + courseCodes.get(i) + "]...");
-                String courseDetails[] = getCourseDetailsFromCoursesData(coursesData, courseCodes.get(i));
-                System.out.println("[Done]");
+            if (courseCodes.isEmpty()) {
+                logn("\nCourses have been already registered!\n[Exit]");
+                System.exit(1);
+            }
+
+            // must get this shit before submitting a new course >.<
+            sendPost(AVAILABLE_COURSES_DATA_URL_MAJOR, "");
+
+            // get list of courses and the course details by given course code
+            log("Get raw courses data...");
+            String coursesData = sendPost(AVAILABLE_COURSES_DATA_URL_ALL, "");
+            logn("[Done]");
+
+            for (Iterator<String> it = courseCodes.iterator(); it.hasNext();) {
+                String courseCode = it.next();
+                log("\nGetting course information for [" + courseCode + "]...");
+                String courseDetails[] = getCourseDetailsFromCoursesData(coursesData, courseCode);
+                logn("[Done]");
 
                 /* register courses and submit them */
                 if (courseDetails != null) {
                     // check prerequisite courses
-                    System.out.print("Checking prerequisite courses...");
+                    log("Checking prerequisite courses...");
                     String res = sendPost(String.format(CHECK_PREREQUISITE_COURSES_URL, courseDetails[0]), "");
-                    System.out.println("[Done]");
-                    System.out.println("Response: " + res);
+                    logn("[Done]");
+                    logn("Response: " + res);
                     // choose course
-                    System.out.print("Choose [" + courseCodes.get(i) + "] for queue...");
+                    log("Choose [" + courseCodes + "] for queue...");
                     res = sendPost(String.format(CHOOSE_COURSE_URL, courseDetails[1]), "");
-                    System.out.println("[Done]");
-                    System.out.println("Response: " + res);
+                    logn("[Done]");
+                    logn("Response: " + res);
                     // remove after being registered
                     if (res.contains("thành công"))
-                        courseCodes.remove(i);
+                        it.remove();
                 }
             }
 
             // submit registered courses
-            System.out.print("Submitting...");
+            log("Submitting...");
             String res = sendPost(String.format(SUBMIT_URL, ""), "");
-            System.out.println("[Done]");
-            System.out.println("Response: " + res);
+            logn("[Done]");
+            logn("Response: " + res);
 
             // logout
-            System.out.print("Logging out...");
+            log("Logging out...");
             sendGet(LOGOUT_URL);
-            System.out.println("[Success]");
+            logn("[Success]");
 
             if (courseCodes.isEmpty()) {
-                System.out.println("\nRegistered all!\n[Exit]");
+                logn("\nRegistered all!\n[Exit]");
                 System.exit(1);
             }
 
-            System.out.println("/******************************************/");
+            logn("/******************************************/");
             Thread.sleep(sleepTime);
         }
     }
@@ -201,18 +185,18 @@ public class AutoDKMH {
      * @throws IOException
      */
     private void doLogin() throws IOException {
-        System.out.print("Getting cookies, token...");
+        log("Getting cookies, token...");
         String loginSiteHtml = sendGet(LOGIN_URL);
-        System.out.println("[Done]");
+        logn("[Done]");
 
-        System.out.print("Logging in...");
+        log("Logging in...");
         String loginParams = getFormParams(loginSiteHtml, user, password);
         String res = sendPost(LOGIN_URL, loginParams);
         if (!res.contains("<title>Trang ch\u1EE7")) {
-            System.out.println("[Fail]");
+            logn("[Fail]");
             System.exit(1);
         }
-        System.out.println("[Success]");
+        logn("[Success]");
     }
 
     /**
@@ -357,9 +341,9 @@ public class AutoDKMH {
 
         // check result code
         // int responseCode = con.getResponseCode();
-        // System.out.println("\nSending 'POST' request to URL : " + url);
-        // System.out.println("Post parameters : " + postParams);
-        // System.out.println("Response Code : " + responseCode);
+        // logln("\nSending 'POST' request to URL : " + url);
+        // logln("Post parameters : " + postParams);
+        // logln("Response Code : " + responseCode);
 
         // get content
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
@@ -393,8 +377,8 @@ public class AutoDKMH {
 
         // check result code
         // int responseCode = con.getResponseCode();
-        // System.out.println("\nSending 'GET' request to URL : " + url);
-        // System.out.println("Response Code : " + responseCode);
+        // logln("\nSending 'GET' request to URL : " + url);
+        // logln("Response Code : " + responseCode);
 
         // get result content
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
@@ -406,5 +390,13 @@ public class AutoDKMH {
         }
         in.close();
         return response.toString();
+    }
+    
+    private static void log(String message) {
+        System.out.print(message);
+    }
+    
+    private static void logn(String message) {
+        log(message + "\n");
     }
 }
