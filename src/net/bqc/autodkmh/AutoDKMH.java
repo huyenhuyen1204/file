@@ -18,8 +18,10 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * Tool for automatically registering courses of VNU Created by cuong on
- * 12/2/2015. Updated on 20/12/2016
+ * Tool for automatically registering courses of VNU.
+ * 
+ * @Created by cuong on 2/12/2015.
+ * @Updated by cuong on 17/08/2017
  */
 public class AutoDKMH {
 
@@ -27,20 +29,21 @@ public class AutoDKMH {
 
     public final static String LOGIN_URL = HOST + "/dang-nhap";
     public final static String LOGOUT_URL = HOST + "/Account/Logout";
-    public final static String AVAILABLE_COURSES_DATA_URL = HOST + "/danh-sach-mon-hoc/1/1"; // only
-                                                                                             // available
-                                                                                             // course
-                                                                                             // for
-                                                                                             // faculty
-    public final static String AVAILABLE_COURSES_DATA_URL_2 = HOST + "/danh-sach-mon-hoc/1/2"; // all
-                                                                                               // courses
+
+    // only available courses for your major
+    public final static String AVAILABLE_COURSES_DATA_URL_MAJOR = HOST + "/danh-sach-mon-hoc/1/1";
+
+    // all available courses
+    public final static String AVAILABLE_COURSES_DATA_URL_ALL = HOST + "/danh-sach-mon-hoc/1/2";
+
     public final static String REGISTERED_COURSES_DATA_URL = HOST + "/danh-sach-mon-hoc-da-dang-ky/1";
-    public final static String CHECK_PREREQUISITE_COURSES_URL = HOST + "/kiem-tra-tien-quyet/%s/1"; // %s
-                                                                                                    // for
-                                                                                                    // data-crdid
-    public final static String CHOOSE_COURSE_URL = HOST + "/chon-mon-hoc/%s/1/1"; // %s
-                                                                                  // for
-                                                                                  // data-rowindex
+
+    // %s for data-crdid
+    public final static String CHECK_PREREQUISITE_COURSES_URL = HOST + "/kiem-tra-tien-quyet/%s/1";
+
+    // %s for data-rowindex
+    public final static String CHOOSE_COURSE_URL = HOST + "/chon-mon-hoc/%s/1/1";
+
     public final static String SUBMIT_URL = HOST + "/xac-nhan-dang-ky/1";
 
     public final static String USER_AGENT = "Mozilla/5.0";
@@ -71,7 +74,7 @@ public class AutoDKMH {
         // tool.sendGet(HOST);
 
         System.out.println("/******************************************/");
-        System.out.println("//! Username = " + tool.user.substring(0, 6) + "**");
+        System.out.println("//! Username = " + tool.user);
         // not support for password under 2 characters :P
         System.out.println("//! Password = " + "********");
         System.out.println("//! Course Codes = " + tool.courseCodes);
@@ -109,6 +112,12 @@ public class AutoDKMH {
 
     }
 
+    /**
+     * The entrance gate to dark world...
+     * 
+     * @throws IOException
+     * @throws InterruptedException
+     */
     private void run() throws IOException, InterruptedException {
         // turn on cookie
         CookieManager cookieManager = new CookieManager();
@@ -122,7 +131,7 @@ public class AutoDKMH {
             try {
                 doLogin();
             } catch (Exception e) {
-                System.err.println("\nEncounter with exception " + e.getMessage());
+                System.err.println("\nEncountered exception " + e.getMessage());
                 System.out.println("Try again...");
                 continue;
             }
@@ -132,14 +141,13 @@ public class AutoDKMH {
              */
             System.out.print("Get raw courses data...");
 
-            // get available courses of faculty, need do it before submitting
-            // new course
-            String coursesData = sendPost(AVAILABLE_COURSES_DATA_URL, "");
+            // get available courses of faculty
+            // it is necessary to do it before submitting courses
+            sendPost(AVAILABLE_COURSES_DATA_URL_MAJOR, "");
             // must get this shit before submitting a new course >.<
             sendPost(REGISTERED_COURSES_DATA_URL, "");
             // get all available courses of school
-            coursesData = sendPost(AVAILABLE_COURSES_DATA_URL_2, "");
-
+            String coursesData = sendPost(AVAILABLE_COURSES_DATA_URL_ALL, "");
             System.out.println("[Done]");
 
             for (int i = 0; i < courseCodes.size(); i++) {
@@ -159,16 +167,17 @@ public class AutoDKMH {
                     res = sendPost(String.format(CHOOSE_COURSE_URL, courseDetails[1]), "");
                     System.out.println("[Done]");
                     System.out.println("Response: " + res);
-                    // submit registered courses
-                    System.out.print("Submitting...");
-                    res = sendPost(String.format(SUBMIT_URL, ""), "");
-                    System.out.println("[Done]");
-                    System.out.println("Response: " + res);
                     // remove after being registered
                     if (res.contains("thành công"))
                         courseCodes.remove(i);
                 }
             }
+
+            // submit registered courses
+            System.out.print("Submitting...");
+            String res = sendPost(String.format(SUBMIT_URL, ""), "");
+            System.out.println("[Done]");
+            System.out.println("Response: " + res);
 
             // logout
             System.out.print("Logging out...");
@@ -185,11 +194,13 @@ public class AutoDKMH {
         }
     }
 
+    /**
+     * Load login site to get cookie and login parameters then login using post
+     * method
+     * 
+     * @throws IOException
+     */
     private void doLogin() throws IOException {
-        /*
-         * load login site to get cookie and login parameters then login using
-         * post
-         */
         System.out.print("Getting cookies, token...");
         String loginSiteHtml = sendGet(LOGIN_URL);
         System.out.println("[Done]");
@@ -204,6 +215,11 @@ public class AutoDKMH {
         System.out.println("[Success]");
     }
 
+    /**
+     * Load configured parameters
+     * 
+     * @param filePath
+     */
     private void loadInitialParameters(String filePath) {
         try {
             ClassLoader loader = Thread.currentThread().getContextClassLoader();
@@ -227,7 +243,7 @@ public class AutoDKMH {
     }
 
     /**
-     * get data-crdid and data-rowindex of a course
+     * Get data-crdid and data-rowindex of a course
      * 
      * @param coursesDataHtml
      * @param courseCode
@@ -263,7 +279,7 @@ public class AutoDKMH {
     }
 
     /**
-     * get parameters for login action
+     * Get parameters for login action
      * 
      * @param html
      *            parse to get cookie and parameters from this
@@ -309,7 +325,7 @@ public class AutoDKMH {
     }
 
     /**
-     * send post method
+     * Send post method
      * 
      * @param urlStr
      *            url for post
@@ -324,7 +340,6 @@ public class AutoDKMH {
         con.setRequestMethod("POST");
         con.setUseCaches(false);
         con.setDoOutput(true);
-        // con.setConnectTimeout(1000000);
 
         // set properties
         con.setRequestProperty("User-Agent", USER_AGENT);
@@ -350,7 +365,6 @@ public class AutoDKMH {
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
         String inputLine;
         StringBuffer response = new StringBuffer();
-
         while ((inputLine = in.readLine()) != null) {
             response.append(inputLine);
         }
@@ -359,7 +373,7 @@ public class AutoDKMH {
     }
 
     /**
-     * send get method
+     * Send get method
      * 
      * @param urlStr
      *            url for get
@@ -371,7 +385,6 @@ public class AutoDKMH {
         con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         con.setUseCaches(false);
-        // con.setConnectTimeout(1000000);
 
         // set properties
         con.setRequestProperty("User-Agent", USER_AGENT);
