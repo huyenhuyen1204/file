@@ -16,4 +16,4 @@ Config account and course codes in ```src/config.properties```
 ## Run
 Run with maven plugin
 
-```mvn exec:java -Dexec.mainClass="net.bqc.autodkmh.AutoDKMH"```
+```mvn exec:java```
