@@ -113,7 +113,6 @@ public class AutoDKMH {
             // it is necessary to do it before submitting courses
             log("Filtering desired courses...");
             String registeredCoursesData = sendPost(REGISTERED_COURSES_DATA_URL, "");
-            logn(registeredCoursesData);
             courseCodes = courseCodes.stream()
                     .filter(code -> !registeredCoursesData.contains(code))
                     .collect(Collectors.toList());
