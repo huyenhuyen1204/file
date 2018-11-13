@@ -1,0 +1,79 @@
+CREATE TABLE name_basics(
+nconst VARCHAR(100),
+primaryName VARCHAR(100),
+birthYear DOUBLE,
+deathYear DOUBLE,
+primaryProfession VARCHAR(100),
+knownForTitles VARCHAR(100)
+);
+
+LOAD DATA INFILE '/var/lib/mysql-files/name.basics.tsv' INTO TABLE name_basics;
+
+CREATE TABLE title_akas(
+titleId VARCHAR(100),
+ordering DOUBLE,
+title VARCHAR(100),
+region VARCHAR(100),
+language VARCHAR(100),
+types VARCHAR(100),
+attributes VARCHAR(100),
+isOriginalTitle DOUBLE
+);
+
+LOAD DATA INFILE '/var/lib/mysql-files/title.akas.tsv' INTO TABLE title_akas;
+
+CREATE TABLE title_basics(
+tconst VARCHAR(100),
+titleType VARCHAR(100),
+primaryTitle VARCHAR(100),
+originalTitle VARCHAR(100),
+isAdult DOUBLE,
+startYear DOUBLE,
+endYear VARCHAR(100),
+runtimeMinutes DOUBLE,
+genres VARCHAR(100)
+);
+
+LOAD DATA INFILE '/var/lib/mysql-files/title.basics.tsv' INTO TABLE title_basics;
+
+CREATE TABLE title_crew(
+tconst VARCHAR(100),
+directors VARCHAR(100),
+writers VARCHAR(100)
+);
+
+LOAD DATA INFILE '/var/lib/mysql-files/title.crew.tsv' INTO TABLE title_crew;
+
+CREATE TABLE title_episode(
+tconst VARCHAR(100),
+parentTconst VARCHAR(100),
+seasonNumber DOUBLE,
+episodeNumber DOUBLE
+);
+
+LOAD DATA INFILE '/var/lib/mysql-files/title.episode.tsv' INTO TABLE title_episode;
+
+CREATE TABLE title_principals(
+tconst VARCHAR(100),
+ordering DOUBLE,
+nconst VARCHAR(100),
+category VARCHAR(100),
+job VARCHAR(100),
+characters VARCHAR(100)
+);
+
+LOAD DATA INFILE '/var/lib/mysql-files/title.principals.tsv' INTO TABLE title_principals;
+
+CREATE TABLE title_ratings(
+tconst VARCHAR(100),
+averageRating DOUBLE,
+numVotes DOUBLE
+);
+
+LOAD DATA INFILE '/var/lib/mysql-files/title.ratings.tsv' INTO TABLE title_ratings;
+
+
+
+
+
+
