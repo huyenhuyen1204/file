@@ -12,7 +12,7 @@ LOAD DATA INFILE '/var/lib/mysql-files/name.basics.tsv' INTO TABLE name_basics;
 CREATE TABLE title_akas(
 titleId VARCHAR(100),
 ordering LONG,
-title VARCHAR(500),
+title VARCHAR(1000),
 region VARCHAR(100),
 language VARCHAR(100),
 types VARCHAR(100),
@@ -26,7 +26,7 @@ CREATE TABLE title_basics(
 tconst VARCHAR(100),
 titleType VARCHAR(100),
 primaryTitle VARCHAR(500),
-originalTitle VARCHAR(100),
+originalTitle VARCHAR(1000),
 isAdult LONG,
 startYear LONG,
 endYear VARCHAR(100),
@@ -39,7 +39,7 @@ LOAD DATA INFILE '/var/lib/mysql-files/title.basics.tsv' INTO TABLE title_basics
 CREATE TABLE title_crew(
 tconst VARCHAR(100),
 directors VARCHAR(500),
-writers VARCHAR(500)
+writers VARCHAR(2000)
 );
 
 LOAD DATA INFILE '/var/lib/mysql-files/title.crew.tsv' INTO TABLE title_crew;
