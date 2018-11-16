@@ -38,7 +38,7 @@ LOAD DATA INFILE '/var/lib/mysql-files/title.basics.tsv' INTO TABLE title_basics
 
 CREATE TABLE title_crew(
 tconst VARCHAR(100),
-directors VARCHAR(500),
+directors TEXT,
 writers TEXT
 );
 
