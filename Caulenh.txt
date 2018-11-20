@@ -16,6 +16,11 @@ cd ../opt/orientdb/bin/
 
 ./oetl.sh /opt/orientdb/lib/name_basics.json
 ./oetl.sh /opt/orientdb/lib/title_akas.json
+./oetl.sh /opt/orientdb/lib/title_basics.json
+./oetl.sh /opt/orientdb/lib/title_crew.json
+./oetl.sh /opt/orientdb/lib/title_episode.json
+./oetl.sh /opt/orientdb/lib/title_principals.json
+./oetl.sh /opt/orientdb/lib/title_ratings.json
 
 # Vao thu muc run 
 
@@ -26,6 +31,8 @@ cd ../opt/orientdb/bin/
 CONNECT plocal:/usr/local/orientdb/databases/orientdb admin admin 
 
 LIST CLASSES
+
+select from Account
 
 # 
 

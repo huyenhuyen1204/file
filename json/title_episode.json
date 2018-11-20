@@ -1,7 +1,7 @@
 {  
    "source":{  
       "file":{  
-         "path":"/var/lib/mysql-files/name_basics.csv"
+         "path":"/var/lib/mysql-files/title_episode.csv"
       }
    },
   "extractor": {
@@ -20,7 +20,6 @@
          "dbType":"graph",
         "dbUser": "admin",
         "dbPassword": "admin",
-        "dbAutoDropIfExists": true,
         "dbAutoCreate":true,
         "batchCommit": 1000000,
         "wal":  false,
@@ -28,19 +27,9 @@
 
          "classes":[  
             {  
-               "name":"name_basics",
+               "name":"title_episode",
                "extends":"V"
             }
-         ],
-         "indexes":[   
-            {  
-               "class":"name_basics",
-               "fields":[  
-		 "sYear:long"
-               ],
-               "type":"UNIQUE"
-            },
-          {"class":"V", "fields":["URI:string"], "type":"UNIQUE" }
          ]
       }
     }

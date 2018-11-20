@@ -1,7 +1,7 @@
 {  
    "source":{  
       "file":{  
-         "path":"/var/lib/mysql-files/title_akas.csv"
+         "path":"/var/lib/mysql-files/title_ratings.csv"
       }
    },
   "extractor": {
@@ -27,7 +27,7 @@
 
          "classes":[  
             {  
-               "name":"title_akas",
+               "name":"title_ratings",
                "extends":"V"
             }
          ]
