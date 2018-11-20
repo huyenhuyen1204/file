@@ -1,0 +1,38 @@
+SELECT nconst,primaryName,birthYear, deathYear, primaryProfession, knownForTitles FROM name_basics INTO OUTFILE '/var/lib/mysql-files/name_basics.csv' FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
+
+SELECT titleId,ordering,title, region, language, types, attributes, isOriginalTitle FROM title_akas INTO OUTFILE '/var/lib/mysql-files/title_akas.csv' FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
+
+SELECT tconst,titleType,primaryTitle, originalTitle, isAdult, startYear, endYear, runtimeMinutes, genres 
+FROM title_basics INTO OUTFILE '/var/lib/mysql-files/title_basics.csv' 
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n';
+
+SELECT tconst,directors,writers 
+FROM title_crew INTO OUTFILE '/var/lib/mysql-files/title_crew.csv' 
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n';
+
+SELECT tconst,parentTconst,seasonNumber, episodeNumber 
+FROM title_episode INTO OUTFILE '/var/lib/mysql-files/title_episode.csv' 
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n';
+
+SELECT tconst,ordering,nconst, category, job, characters 
+FROM title_principals INTO OUTFILE '/var/lib/mysql-files/title_principals.csv' 
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n';
+
+SELECT tconst,averageRating,numVotes
+FROM title_ratings INTO OUTFILE '/var/lib/mysql-files/title_ratings.csv' 
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n';
+
+
+
+
+
