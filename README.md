@@ -1,3 +1,5 @@
+# Dang nhap server
+
 ssh root@178.128.58.224
 
 mysql -u root  -p
@@ -14,13 +16,13 @@ cd ../opt/orientdb/lib/
 
 cd ../opt/orientdb/bin/
 
-./oetl.sh /opt/orientdb/lib/name_basics.json
-./oetl.sh /opt/orientdb/lib/title_akas.json
-./oetl.sh /opt/orientdb/lib/title_basics.json
-./oetl.sh /opt/orientdb/lib/title_crew.json
-./oetl.sh /opt/orientdb/lib/title_episode.json
-./oetl.sh /opt/orientdb/lib/title_principals.json
-./oetl.sh /opt/orientdb/lib/title_ratings.json
+./oetl.sh /opt/orientdb/lib/name_basics.json 
+./oetl.sh /opt/orientdb/lib/title_akas.json 
+./oetl.sh /opt/orientdb/lib/title_basics.json 
+./oetl.sh /opt/orientdb/lib/title_crew.json 
+./oetl.sh /opt/orientdb/lib/title_episode.json 
+./oetl.sh /opt/orientdb/lib/title_principals.json 
+./oetl.sh /opt/orientdb/lib/title_ratings.json 
 
 # Vao thu muc run 
 
