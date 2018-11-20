@@ -1,0 +1,23 @@
+ssh root@178.128.58.224
+
+mysql -u root  -p
+
+Vao thu muc run 
+cd ../opt/orientdb/bin/
+
+./console.sh
+
+cd ../opt/orientdb/lib/
+
+//copy file tai ve vao /opt/orientdb/lib/orientdb
+
+cp a- /root/file/. /opt/orientdb/lib/
+
+// Chay lenh de import 
+
+cd ../opt/orientdb/bin/
+./oetl.sh /opt/orientdb/lib/name_basics.json
+
+
+
+
