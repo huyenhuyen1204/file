@@ -2,21 +2,33 @@ ssh root@178.128.58.224
 
 mysql -u root  -p
 
-Vao thu muc run 
+
+
+# copy file tai ve vao /opt/orientdb/lib/orientdb
+
+cp -a /root/file/json/. /opt/orientdb/lib/
+
+cd ../opt/orientdb/lib/
+
+# Chay lenh de import 
+
+cd ../opt/orientdb/bin/
+
+./oetl.sh /opt/orientdb/lib/name_basics.json
+./oetl.sh /opt/orientdb/lib/title_akas.json
+
+# Vao thu muc run 
+
 cd ../opt/orientdb/bin/
 
 ./console.sh
 
-cd ../opt/orientdb/lib/
+CONNECT plocal:/usr/local/orientdb/databases/orientdb admin admin 
 
-//copy file tai ve vao /opt/orientdb/lib/orientdb
+LIST CLASSES
 
-cp a- /root/file/. /opt/orientdb/lib/
+# 
 
-// Chay lenh de import 
-
-cd ../opt/orientdb/bin/
-./oetl.sh /opt/orientdb/lib/name_basics.json
 
 
 
