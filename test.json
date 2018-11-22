@@ -1,7 +1,7 @@
 {  
    "source":{  
       "file":{  
-         "path":"/var/lib/mysql-files/title_crew.csv"
+         "path":"/var/lib/mysql-files/title_ratings.csv"
       }
    },
   "extractor": {
@@ -11,23 +11,24 @@
   {
   "field": {
     "fieldName": "@class",
-    "value": "TitleCrew"
+    "value": "title_ratings"
   }
 }],
    "loader":{  
       "orientdb":{  
-         "dbURL":"plocal:/opt/orientdb/databases/orientdb",
+         "dbURL":"plocal:/usr/local/orientdb/databases/orientdb",
          "dbType":"document",
         "dbUser": "admin",
         "dbPassword": "admin",
+        "dbAutoDropIfExists": true,
         "dbAutoCreate":true,
-        "batchCommit": 1000,
+        "batchCommit": 1000000,
         "wal":  false,
         "tx": false,
 
          "classes":[  
             {  
-               "name":"title_crew"
+               "name":"name_basics"
             }
          ]
       }

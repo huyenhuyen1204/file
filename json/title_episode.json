@@ -11,24 +11,23 @@
   {
   "field": {
     "fieldName": "@class",
-    "value": "Account"
+    "value": "TitleEpisode"
   }
 }],
    "loader":{  
       "orientdb":{  
-         "dbURL":"plocal:/usr/local/orientdb/databases/orientdb",
+         "dbURL":"plocal:/opt/orientdb/databases/orientdb",
          "dbType":"graph",
         "dbUser": "admin",
         "dbPassword": "admin",
         "dbAutoCreate":true,
-        "batchCommit": 1000000,
+        "batchCommit": 1000,
         "wal":  false,
         "tx": false,
 
          "classes":[  
             {  
-               "name":"title_episode",
-               "extends":"V"
+               "name":"TitleEpisode"
             }
          ]
       }

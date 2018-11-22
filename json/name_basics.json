@@ -11,13 +11,13 @@
   {
   "field": {
     "fieldName": "@class",
-    "value": "Account"
+    "value": "NameBasics"
   }
 }],
    "loader":{  
       "orientdb":{  
-         "dbURL":"plocal:/usr/local/orientdb/databases/orientdb",
-         "dbType":"graph",
+         "dbURL":"plocal:/opt/orientdb/databases/orientdb",
+         "dbType":"document",
         "dbUser": "admin",
         "dbPassword": "admin",
         "dbAutoDropIfExists": true,
@@ -27,20 +27,16 @@
         "tx": false,
 
          "classes":[  
-            {  
-               "name":"name_basics",
-               "extends":"V"
-            }
+            {"name":"NameBasics"}
          ],
          "indexes":[   
             {  
-               "class":"name_basics",
+               "class":"NameBasics",
                "fields":[  
-		 "sYear:long"
+		 "birthYear:long"
                ],
                "type":"UNIQUE"
-            },
-          {"class":"V", "fields":["URI:string"], "type":"UNIQUE" }
+            }
          ]
       }
     }

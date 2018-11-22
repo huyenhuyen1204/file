@@ -11,7 +11,7 @@
   {
   "field": {
     "fieldName": "@class",
-    "value": "Account"
+    "value": "TitleRatings"
   }
 }],
    "loader":{  
@@ -21,14 +21,13 @@
         "dbUser": "admin",
         "dbPassword": "admin",
         "dbAutoCreate":true,
-        "batchCommit": 1000000,
+        "batchCommit": 1000,
         "wal":  false,
         "tx": false,
 
          "classes":[  
             {  
-               "name":"title_ratings",
-               "extends":"V"
+               "name":"TitleRatings"
             }
          ]
       }
