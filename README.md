@@ -1,12 +1,19 @@
 # Dang nhap server
 
-ssh root@178.128.58.224
+ssh root@128.199.205.8
 
 mysql -u root  -p
 
 # ----MYSQL
+## install
+
+https://www.fullstackpython.com/blog/install-mysql-ubuntu-1604.html
+
 ## Lấy file về và copy vào mysql-files
 ### tạo file và kéo về
+
+
+
 mkdir databases
 
 cd databases
