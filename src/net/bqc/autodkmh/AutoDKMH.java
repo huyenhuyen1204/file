@@ -151,7 +151,7 @@ public class AutoDKMH {
                     logn("[Done]");
                     logn("Response: " + res);
                     // remove after being registered
-                    if (res.contains("thành công"))
+                    if (res.contains("th?nh c?ng"))
                         it.remove();
                 }
             }
