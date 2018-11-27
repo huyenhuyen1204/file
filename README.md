@@ -29,6 +29,8 @@ wget https://datasets.imdbws.com/title.ratings.tsv.gz
 
 gunzip \*.gz
 
+source /root/file/import.txt
+source /root/file/convert.txt
 
 cp -a /root/databases/. /var/lib/mysql-files/
 
@@ -57,6 +59,13 @@ cd ../opt/orientdb/bin/
 ./oetl.sh /opt/orientdb/lib/title_principals.json 
 
 ./oetl.sh /opt/orientdb/lib/title_ratings.json 
+# index
+https://github.com/orientechnologies/orientdb/issues/6415
+
+CREATE PROPERTY NameBasics.birthYear INTEGER
+
+CREATE INDEX NameBasics.birthYear ON NameBasics (birthYear) NOTUNIQUE METADATA {ignoreNullValues: false}
+
 
 ## Vao thu muc run 
 
@@ -70,6 +79,10 @@ LIST CLASSES
 
 select from Account
 
+# CHECK + lỗi "rw"
+ps aux | grep "orientdb" | grep -v grep | awk '{print $2}'
+
+=> K connect database đó thì sẽ dùng đc
 # CREATE database in opt
 
 CREATE DATABASE PLOCAL:/opt/orientdb/databases/orientdb root 123456

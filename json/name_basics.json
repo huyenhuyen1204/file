@@ -30,15 +30,11 @@
             {"name":"NameBasics"}
          ],
          "indexes":[   
-            {  
-               "class":"NameBasics",
-               "fields":[  
-		 "birthYear:long"
-               ],
-               "type":"UNIQUE"
-            }
+            {"class":"NameBasics", "fields":["birthYear:String"], "type":"NOTUNIQUE" ,
+            metadata : { "ignoreNullValues" : false }
+        	}
          ]
-      }
+  
     }
 }
 
