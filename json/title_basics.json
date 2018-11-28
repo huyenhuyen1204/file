@@ -29,6 +29,9 @@
             {  
                "name":"TitleBasics"
             }
+         ],
+	"indexes":[   
+	    {"class": "TitleBasics", "fields":["tconst:String"], "type":"UNIQUE_HASH_INDEX"}
          ]
       }
     }

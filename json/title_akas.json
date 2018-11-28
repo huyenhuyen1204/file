@@ -29,6 +29,9 @@
             {  
                "name":"TitleAkas"
             }
+         ],
+	"indexes":[   
+	    {"class": "TitleAkas", "fields":["tconst:String"], "type":"UNIQUE_HASH_INDEX"}
          ]
       }
     }

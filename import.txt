@@ -11,6 +11,8 @@ LOAD DATA INFILE '/var/lib/mysql-files/name.basics.tsv' INTO TABLE name_basics;
 
 CREATE INDEX birthYear_index ON name_basics(birthYear(4));
 
+CREATE INDEX nconst_index ON name_basics(nconst(9)) USING HASH;
+
 CREATE TABLE title_akas(
 titleId VARCHAR(100),
 ordering LONG,

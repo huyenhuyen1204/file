@@ -1,4 +1,4 @@
-SELECT nconst,primaryName,birthYear, deathYear, primaryProfession, knownForTitles FROM name_basics INTO OUTFILE '/var/lib/mysql-files/name_basics.csv' FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
+SELECT nconst,primaryName,birthYear, deathYear, primaryProfession, knownForTitles FROM name_basics INTO OUTFILE '/root/databases/name_basics.csv' FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
 
 SELECT titleId,ordering,title, region, language, types, attributes, isOriginalTitle FROM title_akas INTO OUTFILE '/var/lib/mysql-files/title_akas.csv' FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
 
@@ -31,6 +31,7 @@ FROM title_ratings INTO OUTFILE '/var/lib/mysql-files/title_ratings.csv'
 FIELDS TERMINATED BY ',' 
 ENCLOSED BY '"' 
 LINES TERMINATED BY '\n';
+
 
 
 

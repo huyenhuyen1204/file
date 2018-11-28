@@ -22,7 +22,7 @@
         "dbPassword": "admin",
         "dbAutoDropIfExists": true,
         "dbAutoCreate":true,
-        "batchCommit": 1000000,
+        "batchCommit": 1000,
         "wal":  false,
         "tx": false,
 
@@ -32,7 +32,7 @@
          "indexes":[   
             {"class":"NameBasics", "fields":["birthYear:String"], "type":"NOTUNIQUE" ,
             metadata : { "ignoreNullValues" : false }
-            }
+            },
 	    {"class": "NameBasics", "fields":["nconst:String"], "type":"UNIQUE_HASH_INDEX"}
          ]
   	}

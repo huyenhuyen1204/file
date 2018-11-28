@@ -36,12 +36,17 @@ wget https://datasets.imdbws.com/title.ratings.tsv.gz
 
 gunzip \*.gz
 
-source /root/file/import.txt
-source /root/file/convert.txt
-
 cp -a /root/databases/. /var/lib/mysql-files/
 
+source /root/file/import.txt
+chmod 0777 /var/lib/mysql-files
+source /root/file/convert.txt
+
+
+
 # ----ORIENTDB
+
+https://websiteforstudents.com/install-and-configure-orientdb-on-ubuntu-16-04-18-04-lts-servers/
 
 ## copy file js tai ve vao /opt/orientdb/lib/orientdb
 

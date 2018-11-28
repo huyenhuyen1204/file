@@ -29,6 +29,9 @@
             {  
                "name":"TitleEpisode"
             }
+         ],
+	"indexes":[   
+	    {"class": "TitleEpisode", "fields":["tconst:String"], "type":"UNIQUE_HASH_INDEX"}
          ]
       }
     }

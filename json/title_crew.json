@@ -27,8 +27,11 @@
 
          "classes":[  
             {  
-               "name":"title_crew"
+               "name":"TitleCrew"
             }
+         ],
+	"indexes":[   
+	    {"class": "TitleCrew", "fields":["tconst:String"], "type":"UNIQUE_HASH_INDEX"}
          ]
       }
     }

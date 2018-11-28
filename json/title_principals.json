@@ -29,6 +29,10 @@
             {  
                "name":"TitlePrincipals"
             }
+         ],
+	"indexes":[   
+	    {"class": "TitlePrincipals", "fields":["tconst:String"], "type":"UNIQUE_HASH_INDEX"},
+	    {"class": "TitlePrincipals", "fields":["nconst:String"], "type":"UNIQUE_HASH_INDEX"}
          ]
       }
     }
