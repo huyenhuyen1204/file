@@ -32,9 +32,10 @@
          "indexes":[   
             {"class":"NameBasics", "fields":["birthYear:String"], "type":"NOTUNIQUE" ,
             metadata : { "ignoreNullValues" : false }
-        	}
+            }
+	    {"class": "NameBasics", "fields":["nconst:String"], "type":"UNIQUE_HASH_INDEX"}
          ]
-  
+  	}
     }
 }
 
