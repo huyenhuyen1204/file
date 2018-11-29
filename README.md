@@ -48,9 +48,13 @@ source /root/file/convert.txt
 
 https://websiteforstudents.com/install-and-configure-orientdb-on-ubuntu-16-04-18-04-lts-servers/
 
-## copy file js tai ve vao /opt/orientdb/lib/orientdb
+## copy file json kieu "document" tai ve vao /opt/orientdb/lib/orientdb
 
 cp -a /root/file/json/. /opt/orientdb/lib/
+
+## copy file json kieu "graph"
+
+cp -a /root/file/graph/. /opt/orientdb/lib/
 
 cd ../opt/orientdb/lib/
 
