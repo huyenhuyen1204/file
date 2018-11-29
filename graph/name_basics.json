@@ -1,0 +1,42 @@
+{  
+   "source":{  
+      "file":{  
+         "path":"/var/lib/mysql-files/name_basics.csv"
+      }
+   },
+  "extractor": {
+    "csv": {}
+   },
+   "transformers": [
+  {
+  "field": {
+    "fieldName": "@class",
+    "value": "NameBasics"
+  }
+}],
+   "loader":{  
+      "orientdb":{  
+         "dbURL":"plocal:/opt/orientdb/databases/orientdb",
+         "dbType":"document",
+        "dbUser": "admin",
+        "dbPassword": "admin",
+        "dbAutoDropIfExists": true,
+        "dbAutoCreate":true,
+        "batchCommit": 1000,
+        "wal":  false,
+        "tx": false,
+
+         "classes":[  
+            {"name":"NameBasics"}
+         ],
+         "indexes":[   
+            {"class":"NameBasics", "fields":["birthYear:String"], "type":"NOTUNIQUE" ,
+            metadata : { "ignoreNullValues" : false }
+            },
+	    {"class": "NameBasics", "fields":["nconst:String"], "type":"UNIQUE_HASH_INDEX"}
+         ]
+  	}
+    }
+}
+
+		

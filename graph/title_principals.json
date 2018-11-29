@@ -1,0 +1,37 @@
+{  
+   "source":{  
+      "file":{  
+         "path":"/var/lib/mysql-files/title_principals.csv"
+      }
+   },
+  "extractor": {
+    "csv": {}
+   },
+   "transformers": [
+  {
+  "field": {
+    "fieldName": "@class",
+    "value": "TitlePrincipals"
+  }
+}],
+   "loader":{  
+      "orientdb":{  
+         "dbURL":"plocal:/opt/orientdb/databases/orientdb",
+         "dbType":"document",
+        "dbUser": "admin",
+        "dbPassword": "admin",
+        "dbAutoCreate":true,
+        "batchCommit": 1000,
+        "wal":  false,
+        "tx": false,
+
+         "classes":[
+            {  
+               "name":"TitlePrincipals"
+            }
+         ]
+      }
+    }
+}
+
+		
