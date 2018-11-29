@@ -17,7 +17,7 @@
    "loader":{  
       "orientdb":{  
          "dbURL":"plocal:/usr/local/orientdb/databases/orientdb",
-         "dbType":"graph",
+         "dbType":"document",
         "dbUser": "admin",
         "dbPassword": "admin",
         "dbAutoCreate":true,
@@ -29,9 +29,6 @@
             {  
                "name":"TitleRatings"
             }
-         ],
-	"indexes":[   
-	    {"class": "TitleRatings", "fields":["tconst:String"], "type":"UNIQUE_HASH_INDEX"}
          ]
       }
     }
