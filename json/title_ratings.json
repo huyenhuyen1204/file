@@ -16,7 +16,7 @@
 }],
    "loader":{  
       "orientdb":{  
-         "dbURL":"plocal:/usr/local/orientdb/databases/orientdb",
+         "dbURL":"plocal:/opt/orientdb/databases/orientdb",
          "dbType":"document",
         "dbUser": "admin",
         "dbPassword": "admin",
