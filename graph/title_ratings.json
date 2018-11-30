@@ -12,10 +12,10 @@
   "field": {
     "fieldName": "@class",
     "value": "TitleRatings"
-  },
-  { "vertex": { "class": "TitleRatings" } },
-  { "edge": { "class": "HasName",  "joinFieldName": "tconst", "lookup": "TitleBasics.tconst" } }
-}],
+  }},
+  {"vertex": { "class": "TitleRatings" }},
+  {"edge": { "class": "HasName",  "joinFieldName": "tconst", "lookup": "TitleBasics.tconst" }}
+],
    "loader":{  
       "orientdb":{  
          "dbURL":"plocal:/opt/orientdb/databases/orientdb",

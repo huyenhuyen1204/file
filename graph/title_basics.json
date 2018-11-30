@@ -12,9 +12,10 @@
 	  "field": {
 	    "fieldName": "@class",
 	    "value": "TitleBasics"
-	  }
+	  }},
+	{"vertex": { "class": "TitleBasics" }}
 
-  }],
+  ],
    "loader":{  
       "orientdb":{  
          "dbURL":"plocal:/opt/orientdb/databases/orientdb",
