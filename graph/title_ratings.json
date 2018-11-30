@@ -12,7 +12,9 @@
   "field": {
     "fieldName": "@class",
     "value": "TitleRatings"
-  }
+  },
+  { "vertex": { "class": "TitleRatings" } },
+  { "edge": { "class": "HasName",  "joinFieldName": "tconst", "lookup": "TitleBasics.tconst" } }
 }],
    "loader":{  
       "orientdb":{  
@@ -29,7 +31,8 @@
             {  
                "name":"TitleRatings",
 		"extends": "V"
-            }
+            },
+	   {"name": "HasName", "extends": "E"}
          ],
 	"indexes":[   
 	    {"class": "TitleRatings", "fields":["tconst:String"], "type":"UNIQUE_HASH_INDEX"}

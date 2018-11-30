@@ -12,9 +12,7 @@
 	  "field": {
 	    "fieldName": "@class",
 	    "value": "TitleBasics"
-	  },
-	  { "vertex": { "class": "TitleBasics" } },
-	  { "edge": { "class": "HasRatings",  "joinFieldName": "tconst", "lookup": "TitleBasics.tconst" } }
+	  }
 
   }],
    "loader":{  
@@ -32,8 +30,7 @@
             {  
                "name":"TitleBasics",
 	       "extends": "V"
-            },
-	     {"name": "HasRatings", "extends": "E"}
+            }
          ],
 	"indexes":[   
 	    {"class": "TitleBasics", "fields":["tconst:String"], "type":"UNIQUE_HASH_INDEX"}
