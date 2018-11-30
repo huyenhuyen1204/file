@@ -8,12 +8,15 @@
     "csv": {}
    },
    "transformers": [
-  {
-  "field": {
-    "fieldName": "@class",
-    "value": "TitleBasics"
-  }
-}],
+	  {
+	  "field": {
+	    "fieldName": "@class",
+	    "value": "TitleBasics"
+	  },
+	  { "vertex": { "class": "TitleBasics" } },
+	  { "edge": { "class": "HasRatings",  "joinFieldName": "tconst", "lookup": "TitleBasics.tconst" } }
+
+  }],
    "loader":{  
       "orientdb":{  
          "dbURL":"plocal:/opt/orientdb/databases/orientdb",
@@ -29,7 +32,11 @@
             {  
                "name":"TitleBasics",
 	       "extends": "V"
-            }
+            },
+	     {"name": "HasRatings", "extends": "E"}
+         ],
+	"indexes":[   
+	    {"class": "TitleBasics", "fields":["tconst:String"], "type":"UNIQUE_HASH_INDEX"}
          ]
       }
     }

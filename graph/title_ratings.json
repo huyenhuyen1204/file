@@ -30,6 +30,9 @@
                "name":"TitleRatings",
 		"extends": "V"
             }
+         ],
+	"indexes":[   
+	    {"class": "TitleRatings", "fields":["tconst:String"], "type":"UNIQUE_HASH_INDEX"}
          ]
       }
     }
