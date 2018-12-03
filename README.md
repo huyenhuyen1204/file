@@ -109,4 +109,4 @@ CONNECT PLOCAL:/opt/orientdb/databases/orientdb orientdb
 
 
 
-
+https://orientdb.com/docs/last/Import-the-Database-of-Beers.html
